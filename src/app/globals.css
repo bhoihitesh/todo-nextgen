@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* table background css */
+.ant-table-thead > tr > th {
+    background-color: #585a5a !important;
+    color: #fff !important;
+}
+.ant-table-tbody > tr > td {
+  background-color: #909494;
+  color: #333;
+}
+
+/* table border css */
+.ant-table-bordered .ant-table-cell {
+  border-color: #3333 !important;
+}
+
+.ant-table-bordered .ant-table-row:hover > td {
+  border-color: #3333 !important;
+}
+
+/* pagination css */
+.ant-pagination-item {
+  background-color: #909494 !important;
+  color: #0000 !important;
+  border: 2px solid #0000 !important;
+}
+
+.ant-pagination-item-active a{
+  color: #ffff !important;
+}
+
+.ant-pagination-item:hover {
+  background-color: #333 !important;
+  color: #ffff !important;
+}
+
+
+/* menu hover css */
+.ant-btn-variant-text:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #fff !important;
+}
