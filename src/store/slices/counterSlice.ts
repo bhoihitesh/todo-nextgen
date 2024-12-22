@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const counterSlice = createSlice({
-    name: 'mycounter',
-    initialState: {count: 0},
+    name: 'myslice',
+    initialState: {
+        count: 0,
+        isSidebarOpen: true,
+    },
     reducers: {
         increment:(state) => {
             state.count += 1;
@@ -14,9 +17,12 @@ const counterSlice = createSlice({
         },
         resetCount:(state)=>{
             state.count = 1;
+        },
+        handleSidebarToggle:(state)=>{
+            state.isSidebarOpen = !state.isSidebarOpen;
         }
     }
 })
 
-export const { increment, decrement, resetCount } = counterSlice.actions;
+export const { increment, decrement, resetCount, handleSidebarToggle } = counterSlice.actions;
 export default counterSlice.reducer;
