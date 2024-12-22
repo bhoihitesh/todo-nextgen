@@ -5,11 +5,11 @@
 
 /* table background css */
 .ant-table-thead > tr > th {
-    background-color: #585a5a !important;
+    background-color: black !important;
     color: #fff !important;
 }
 .ant-table-tbody > tr > td {
-  background-color: #909494;
+  background-color: #d2d6d6;
   color: #333;
 }
 
@@ -24,7 +24,7 @@
 
 /* pagination css */
 .ant-pagination-item {
-  background-color: #909494 !important;
+  background-color: black !important;
   color: #0000 !important;
   border: 2px solid #0000 !important;
 }
@@ -34,7 +34,7 @@
 }
 
 .ant-pagination-item:hover {
-  background-color: #333 !important;
+  background-color: black !important;
   color: #ffff !important;
 }
 
