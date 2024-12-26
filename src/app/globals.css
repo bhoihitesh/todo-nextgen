@@ -5,7 +5,7 @@
 
 /* table background css */
 .ant-table-thead > tr > th {
-    background-color: black !important;
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1)) !important;
     color: #fff !important;
 }
 .ant-table-tbody > tr > td {
@@ -42,4 +42,25 @@
 /* menu hover css */
 .ant-btn-variant-text:not(:disabled):not(.ant-btn-disabled):hover {
   color: #fff !important;
+}
+
+/* delete model */
+.deletebtn {
+  background-color: red;
+  padding: 12px;
+}
+.cancelbtn {
+  padding: 12px;
+}
+
+/* date picker */
+.ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels {
+ flex-direction: column;
+}
+
+/* antd button default hover css */
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, .ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
+  background-color: black;
+  color: white;
+  border: none;
 }

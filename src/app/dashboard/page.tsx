@@ -1,22 +1,39 @@
 "use client";
-
-import { Table, TableProps } from "antd";
-import { useState } from "react";
-import jsondata from './jsondata.json'
+import { Popconfirm, Table, TableProps } from "antd";
+import { useEffect, useState } from "react";
+import  { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons"
+import {recordType} from "../../../src/customeTypes"
+import axios from "axios";
+import RecordModal from "@/components/RecordModal";
+import FilterTab from "@/components/FilterTab";
 
 const page = () => {
-  interface DataType {
-    key: string;
-    title: string;
-    description: string;
-    date: string;
-  }
+  const [records,setRecords] = useState([]);
+  const [editRecord,setEditRecord] = useState<recordType>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [addModal, setAddModal] = useState<boolean>(false);
 
-  const columns: TableProps<DataType>["columns"] = [
-    {
-      title: "No",
-      dataIndex: "key",
-    },
+
+    const fetchRecords = async() =>{
+      try {
+        setLoading(true);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/records`)
+        const {data,status} = res;
+        console.log(data)
+        if( status == 200 ) setRecords(data?.records);
+      } catch (error) {
+        console.log('Error while fetching records',error)
+      } finally {
+        setLoading(false);
+      }
+    }
+    useEffect(()=>{
+      fetchRecords();
+    },[]);
+
+  const columns: TableProps<recordType>["columns"] = [
     {
       title: "Title",
       dataIndex: "title",
@@ -28,55 +45,96 @@ const page = () => {
     {
       title: "Date",
       dataIndex: "date",
-      sorter: (a:any, b:any)=> new Date(a.date).getTime() - new Date(b.date).getTime(),
+      sorter: (a: any, b: any) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime(),
     },
     {
       title: "View",
-      // dataIndex: "date",
+      render: (_, record) => (
+        <EyeOutlined
+          className="text-[20px] hover:text-blue-600"
+          onClick={() => handleView(record)}
+        />
+      ),
     },
     {
       title: "Edit",
-      // dataIndex: "date",
+      render: (_, record) => (
+        <>
+        <EditOutlined
+          className="text-[20px] hover:text-blue-600"
+          onClick={() => handleEdit(record)}
+        />
+        </>
+      ),
     },
+    
     {
       title: "Delete",
-      // dataIndex: "date",
+      render: (_, record) => (
+        <Popconfirm
+        title="Delete the record"
+        description="Are you sure to delete this record?"
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{className:"deletebtn"}}
+        cancelButtonProps={{className:"cancelbtn"}}
+        onConfirm={()=>handledelete(record._id)}
+        >
+          <DeleteOutlined
+            className="text-[20px] hover:text-red-700"
+          />
+        </Popconfirm>
+      ),
     },
   ];
+  
+  const handleView = (record: recordType) => {
+    console.log(record)
+    setIsEdit(false);
+    setIsModalOpen(true);
+  }
+  const handleEdit = (record: recordType) => {
+    console.log(record)
+    setEditRecord(record);
+    setIsEdit(true);
+    setIsModalOpen(true);
+  }
+  const handledelete = (id: string) => {
+    console.log(id)
+  }
 
-  const data: DataType[] = [
-    {
-      key: "1",
-      title: "John Brown",
-      description: "New York No. 1 Lake Park",
-      date: 'December 07, 2024',
-    },
-    {
-      key: "2",
-      title: "John Brown",
-      description: "New York No. 2 Lake Park",
-      date: 'December 06, 2024',
-    },
-    {
-      key: "3",
-      title: "John Brown",
-      description: "New York No. 3 Lake Park",
-      date: 'December 05, 2024',
-    },
-  ];
+  const handleOpenAddModal = () =>{
+    setIsModalOpen(true);
+    setAddModal(true);
+  }
 
-  const [loading, setLoading] = useState(false);
+  const handleCloseModal=()=>{
+    setIsModalOpen(false);
+    setAddModal(false);
+    fetchRecords();
+  }
+
   return (
     <>
-      <Table<DataType>
+      <div className="float-end" style={{paddingBottom: '10px'}}>
+      <FilterTab onOpen={handleOpenAddModal} isOpen={addModal}/>
+      </div>
+      <div>
+      <Table<recordType>
         columns={columns}
-        dataSource={jsondata}
+        dataSource={records}
         bordered
         loading={loading}
         pagination={{
           className: 'custom-pagination',
         }}
       />
+      { isModalOpen &&
+        <RecordModal record={editRecord} editable={isEdit} onClose={() => handleCloseModal()}  isOpen={addModal}/>
+        
+      }
+      </div>
     </>
   );
 };
