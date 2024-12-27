@@ -1,37 +1,43 @@
 "use client";
-import { Popconfirm, Table, TableProps } from "antd";
+import { Popconfirm, Spin, Table, TableProps } from "antd";
 import { useEffect, useState } from "react";
-import  { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons"
-import {recordType} from "../../../src/customeTypes"
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { recordType } from "../../../src/customeTypes";
 import axios from "axios";
 import RecordModal from "@/components/RecordModal";
 import FilterTab from "@/components/FilterTab";
+import moment from "moment";
 
 const page = () => {
-  const [records,setRecords] = useState([]);
-  const [editRecord,setEditRecord] = useState<recordType>();
+  const [records, setRecords] = useState([]);
+  const [editRecord, setEditRecord] = useState<recordType>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [addModal, setAddModal] = useState<boolean>(false);
 
-
-    const fetchRecords = async() =>{
-      try {
-        setLoading(true);
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/records`)
-        const {data,status} = res;
-        console.log(data)
-        if( status == 200 ) setRecords(data?.records);
-      } catch (error) {
-        console.log('Error while fetching records',error)
-      } finally {
-        setLoading(false);
-      }
+  const fetchRecords = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/records`
+      );
+      const { data, status } = res;
+      if (status == 200) setRecords(data?.records);
+    } catch (error) {
+      console.log("Error while fetching records", error);
+    } finally {
+      setLoading(false);
     }
-    useEffect(()=>{
-      fetchRecords();
-    },[]);
+  };
+  useEffect(() => {
+    fetchRecords();
+  }, []);
 
   const columns: TableProps<recordType>["columns"] = [
     {
@@ -43,10 +49,18 @@ const page = () => {
       dataIndex: "description",
     },
     {
-      title: "Date",
-      dataIndex: "date",
-      sorter: (a: any, b: any) =>
-        new Date(a.date).getTime() - new Date(b.date).getTime(),
+      title: "Record date",
+      dataIndex: "record_date",
+      render: (_, record) => {
+        return moment(record.record_date).format("DD-MM-YYYY hh:mm:ss");
+      },
+    },
+    {
+      title: "Record start date",
+      dataIndex: "record_start_date",
+      render: (_, record) => {
+        return moment(record.record_start_date).format("DD-MM-YYYY hh:mm:ss");
+      },
     },
     {
       title: "View",
@@ -61,80 +75,102 @@ const page = () => {
       title: "Edit",
       render: (_, record) => (
         <>
-        <EditOutlined
-          className="text-[20px] hover:text-blue-600"
-          onClick={() => handleEdit(record)}
-        />
+          <EditOutlined
+            className="text-[20px] hover:text-blue-600"
+            onClick={() => handleEdit(record)}
+          />
         </>
       ),
     },
-    
+
     {
       title: "Delete",
       render: (_, record) => (
         <Popconfirm
-        title="Delete the record"
-        description="Are you sure to delete this record?"
-        okText="Delete"
-        cancelText="Cancel"
-        okButtonProps={{className:"deletebtn"}}
-        cancelButtonProps={{className:"cancelbtn"}}
-        onConfirm={()=>handledelete(record._id)}
+          title="Delete the record"
+          description="Are you sure to delete this record?"
+          okText="Delete"
+          cancelText="Cancel"
+          okButtonProps={{ className: "deletebtn" }}
+          cancelButtonProps={{ className: "cancelbtn" }}
+          onConfirm={() => handledelete(record._id)}
         >
-          <DeleteOutlined
-            className="text-[20px] hover:text-red-700"
-          />
+          <DeleteOutlined className="text-[20px] hover:text-red-700" />
         </Popconfirm>
       ),
     },
   ];
-  
+
   const handleView = (record: recordType) => {
-    console.log(record)
+    console.log(record);
     setIsEdit(false);
     setIsModalOpen(true);
-  }
+  };
   const handleEdit = (record: recordType) => {
-    console.log(record)
+    console.log(record);
     setEditRecord(record);
     setIsEdit(true);
     setIsModalOpen(true);
-  }
-  const handledelete = (id: string) => {
-    console.log(id)
-  }
+  };
+  const handledelete = async (id: string) => {
+    try {
+      const res = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/delete-record/${id}`
+      );
+      if (res.status === 200) {
+        handleCloseModal();
+      }
+    } catch (error) {
+      console.error("Error while deleting record", error);
+    }
+  };
 
-  const handleOpenAddModal = () =>{
+  const handleOpenAddModal = () => {
     setIsModalOpen(true);
     setAddModal(true);
-  }
+  };
 
-  const handleCloseModal=()=>{
+  const handleCloseModal = () => {
     setIsModalOpen(false);
     setAddModal(false);
     fetchRecords();
-  }
+  };
 
   return (
     <>
-      <div className="float-end" style={{paddingBottom: '10px'}}>
-      <FilterTab onOpen={handleOpenAddModal} isOpen={addModal}/>
-      </div>
-      <div>
-      <Table<recordType>
-        columns={columns}
-        dataSource={records}
-        bordered
-        loading={loading}
-        pagination={{
-          className: 'custom-pagination',
-        }}
-      />
-      { isModalOpen &&
-        <RecordModal record={editRecord} editable={isEdit} onClose={() => handleCloseModal()}  isOpen={addModal}/>
-        
-      }
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center h-[80vh] overflow-hidden">
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 34, color: 'black' }} spin />} />
+        </div>
+      ) : (
+        <>
+          <div className="float-end" style={{ paddingBottom: "10px" }}>
+            <FilterTab
+              onOpen={handleOpenAddModal}
+              isOpen={addModal}
+              reload={fetchRecords}
+            />
+          </div>
+          <div>
+            <Table<recordType>
+              columns={columns}
+              dataSource={records}
+              bordered
+              pagination={{
+                className: "custom-pagination",
+              }}
+            />
+            {isModalOpen && (
+              <RecordModal
+                record={editRecord}
+                editable={isEdit}
+                onClose={() => handleCloseModal()}
+                isOpen={addModal}
+              />
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 };

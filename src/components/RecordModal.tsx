@@ -27,18 +27,23 @@ const RecordModal: React.FC<RecordModalProps> = ({
 }) => {
   const [form] = useForm();
   const handleSubmit = async () => {
-    const startDate = moment(form.getFieldValue("date")).format(
+    const recordDate = moment(new Date()).format(
+      "YYYY-MM-DD hh:mm:ss"
+    );
+    const recordStartDate = moment(form.getFieldValue("record_start_date")).format(
       "YYYY-MM-DD hh:mm:ss"
     );
     const taskname = form.getFieldValue("title");
     const taskdescription = form.getFieldValue("description");
 
     const submitObject = {
-      date: startDate,
+      record_date: recordDate,
+      record_start_date: recordStartDate,
       title: taskname,
       description: taskdescription,
     };
-
+    console.warn(submitObject);
+    
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/add-record`,
@@ -50,7 +55,6 @@ const RecordModal: React.FC<RecordModalProps> = ({
     } catch (error) {
       console.error("Error while inserting record", error);
     }
-    console.warn(submitObject);
   };
   return (
     <>
@@ -103,7 +107,7 @@ const RecordModal: React.FC<RecordModalProps> = ({
           <Form.Item name="description" label="Description">
             <Input />
           </Form.Item>
-          <Form.Item name="date" label="Date">
+          <Form.Item name="record_start_date" label="Record Start Date">
             <DatePicker showTime />
           </Form.Item>
         </Form>
