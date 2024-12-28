@@ -4,13 +4,14 @@ import { Table, TableProps } from "antd";
 import { useState } from "react";
 import jsondata from './jsondata.json'
 
-const page = () => {
+const page :React.FC = () => {
   interface DataType {
     key: string;
     title: string;
     description: string;
     date: string;
   }
+  const [loading, SetLoading] = useState(false);
 
   const columns: TableProps<DataType>["columns"] = [
     {
@@ -65,7 +66,6 @@ const page = () => {
     },
   ];
 
-  const [loading, setLoading] = useState(false);
   return (
     <>
       <Table<DataType>
