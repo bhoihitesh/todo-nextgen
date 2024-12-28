@@ -4,7 +4,7 @@ import { Table, TableProps } from "antd";
 import { useState } from "react";
 import jsondata from './jsondata.json'
 
-const page :React.FC = () => {
+const Page :React.FC = () => {
   interface DataType {
     key: string;
     title: string;
@@ -80,4 +80,4 @@ const page :React.FC = () => {
     </>
   );
 };
-export default page;
+export default Page;
