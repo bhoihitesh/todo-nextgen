@@ -103,7 +103,7 @@ const RecordModal: React.FC<RecordModalProps> = ({
         footer={
           isOpen
             ? [
-                <Button className="bg-black text-white" onClick={handleCloseModal}>
+                <Button key="cancel" className="bg-black text-white" onClick={handleCloseModal}>
                   Cancel
                 </Button>,
                 <Button
@@ -116,7 +116,7 @@ const RecordModal: React.FC<RecordModalProps> = ({
               ]
             : editable
             ? [
-                <Button className="bg-black text-white" onClick={handleCloseModal}>
+                <Button key="cancel" className="bg-black text-white" onClick={handleCloseModal}>
                   Cancel
                 </Button>,
                 <Button
