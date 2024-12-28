@@ -49,17 +49,17 @@ const page = () => {
       dataIndex: "description",
     },
     {
-      title: "Record date",
-      dataIndex: "record_date",
-      render: (_, record) => {
-        return moment(record.record_date).format("DD-MM-YYYY hh:mm:ss");
-      },
-    },
-    {
       title: "Record start date",
       dataIndex: "record_start_date",
       render: (_, record) => {
         return moment(record.record_start_date).format("DD-MM-YYYY hh:mm:ss");
+      },
+    },
+    {
+      title: "Record date",
+      dataIndex: "record_date",
+      render: (_, record) => {
+        return moment(record.record_date).format("DD-MM-YYYY hh:mm:ss");
       },
     },
     {
@@ -103,6 +103,7 @@ const page = () => {
 
   const handleView = (record: recordType) => {
     console.log(record);
+    setEditRecord(record);
     setIsEdit(false);
     setIsModalOpen(true);
   };
@@ -126,7 +127,7 @@ const page = () => {
   };
 
   const handleOpenAddModal = () => {
-    setIsModalOpen(true);
+    setIsModalOpen(false);
     setAddModal(true);
   };
 
@@ -147,7 +148,6 @@ const page = () => {
           <div className="float-end" style={{ paddingBottom: "10px" }}>
             <FilterTab
               onOpen={handleOpenAddModal}
-              isOpen={addModal}
               reload={fetchRecords}
             />
           </div>
@@ -160,7 +160,7 @@ const page = () => {
                 className: "custom-pagination",
               }}
             />
-            {isModalOpen && (
+            {(isModalOpen || addModal) && (
               <RecordModal
                 record={editRecord}
                 editable={isEdit}

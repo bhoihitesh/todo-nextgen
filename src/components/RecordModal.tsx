@@ -2,10 +2,9 @@
 import { recordType } from "@/customeTypes";
 import { Button, DatePicker, Form, Input, Modal } from "antd";
 import { useForm } from "antd/es/form/Form";
-import FormItem from "antd/es/form/FormItem";
 import axios from "axios";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface RecordModalProps {
   record: recordType | undefined;
@@ -18,6 +17,7 @@ interface fieldType {
   title: string;
   description: string;
   date: string;
+  _id: string;
 }
 const RecordModal: React.FC<RecordModalProps> = ({
   record,
@@ -26,6 +26,8 @@ const RecordModal: React.FC<RecordModalProps> = ({
   isOpen,
 }) => {
   const [form] = useForm();
+  const [currentRecord, setCurrentRecord] = useState([record])
+
   const handleSubmit = async () => {
     const recordDate = moment(new Date()).format(
       "YYYY-MM-DD hh:mm:ss"
@@ -42,7 +44,6 @@ const RecordModal: React.FC<RecordModalProps> = ({
       title: taskname,
       description: taskdescription,
     };
-    console.warn(submitObject);
     
     try {
       const res = await axios.post(
@@ -56,17 +57,53 @@ const RecordModal: React.FC<RecordModalProps> = ({
       console.error("Error while inserting record", error);
     }
   };
+  
+  const handleCloseModal =()=>{
+    onClose();
+    form.resetFields();
+  }
+
+  const handleUpdateModal = async()=>{
+    const _id = record?._id;
+    const payloadToUpdate = form.getFieldsValue();
+    try {
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/update-record/${_id}`,{payloadToUpdate}
+      );
+      if (res.status == 200) {
+        onClose();
+      }
+    } catch (error) {
+      console.log("Error while updating record",error)
+    }
+  }
+
+  useEffect(()=>{
+    if(!isOpen) {
+      let fieldValues: Record<string, any> = {};
+      currentRecord.forEach((item:any)=>{
+        Object.entries(item).forEach(([key, value])=>{
+          if(key.includes("date") && value){
+            fieldValues[key] = moment(value);
+          } else if(value) {
+            fieldValues[key] = value;
+          }
+        })
+        form.setFieldsValue(fieldValues);
+      })
+    }
+  },[editable, record])
   return (
     <>
       <Modal
-        title="Vertically centered modal dialog"
+        title={<span className="text-[18px]">{ isOpen ? "Add Record" : editable ? "Edit record" : "View record" }</span>}
         centered
         open={true}
-        onOk={onClose}
+        onOk={handleCloseModal}
         footer={
           isOpen
             ? [
-                <Button className="bg-black text-white" onClick={onClose}>
+                <Button className="bg-black text-white" onClick={handleCloseModal}>
                   Cancel
                 </Button>,
                 <Button
@@ -79,20 +116,20 @@ const RecordModal: React.FC<RecordModalProps> = ({
               ]
             : editable
             ? [
-                <Button className="bg-black text-white" onClick={onClose}>
+                <Button className="bg-black text-white" onClick={handleCloseModal}>
                   Cancel
                 </Button>,
                 <Button
                   key="update"
                   className="bg-black text-white"
-                  onClick={onClose}
+                  onClick={handleUpdateModal}
                 >
                   Update
                 </Button>,
               ]
             : null
         }
-        onCancel={onClose}
+        onCancel={handleCloseModal}
         cancelText={"Cancel"}
       >
         <Form
@@ -102,14 +139,17 @@ const RecordModal: React.FC<RecordModalProps> = ({
           wrapperCol={{ span: 24 }}
         >
           <Form.Item<fieldType> name="title" label="Task">
-            <Input />
+            <Input disabled={!editable}/>
           </Form.Item>
           <Form.Item name="description" label="Description">
-            <Input />
+            <Input  disabled={!editable}/>
           </Form.Item>
           <Form.Item name="record_start_date" label="Record Start Date">
-            <DatePicker showTime />
+            <DatePicker showTime format={"DD-MM-YYYY hh:mm:ss"} disabled={!editable}/>
           </Form.Item>
+          { (!isOpen) && <Form.Item name="record_date" label="Record Date">
+            <DatePicker showTime format={"DD-MM-YYYY hh:mm:ss"} disabled={true}/>
+          </Form.Item>}
         </Form>
       </Modal>
     </>

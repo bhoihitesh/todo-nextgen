@@ -6,10 +6,9 @@ const { RangePicker } = DatePicker;
 
 interface modalOpen {
   onOpen : () => void;
-  isOpen: boolean;
   reload: () => void;
 }
-const FilterTab: React.FC<modalOpen> = ({onOpen, isOpen, reload}) => {
+const FilterTab: React.FC<modalOpen> = ({onOpen, reload}) => {
   return (
     <div className='flex gap-2'>
     <RangePicker/>

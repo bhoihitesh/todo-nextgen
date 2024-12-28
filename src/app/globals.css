@@ -64,3 +64,10 @@
   color: white;
   border: none;
 }
+
+/* disable input for the view record */
+.ant-input.ant-input-disabled, .ant-input-outlined, .ant-picker-outlined.ant-picker-disabled, .ant-picker-outlined {
+  color: #050505;
+  border-color: #9999;
+  border-width: 2px;
+}
