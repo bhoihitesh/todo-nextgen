@@ -13,7 +13,7 @@ import RecordModal from "@/components/RecordModal";
 import FilterTab from "@/components/FilterTab";
 import moment from "moment";
 
-const page = () => {
+const Page = () => {
   const [records, setRecords] = useState([]);
   const [editRecord, setEditRecord] = useState<recordType>();
   const [loading, setLoading] = useState<boolean>(false);
