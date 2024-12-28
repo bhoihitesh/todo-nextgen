@@ -139,13 +139,13 @@ const RecordModal: React.FC<RecordModalProps> = ({
           wrapperCol={{ span: 24 }}
         >
           <Form.Item<fieldType> name="title" label="Task">
-            <Input disabled={!editable}/>
+            <Input disabled={!editable && !isOpen}/>
           </Form.Item>
           <Form.Item name="description" label="Description">
-            <Input  disabled={!editable}/>
+            <Input  disabled={!editable && !isOpen}/>
           </Form.Item>
           <Form.Item name="record_start_date" label="Record Start Date">
-            <DatePicker showTime format={"DD-MM-YYYY hh:mm:ss"} disabled={!editable}/>
+            <DatePicker showTime format={"DD-MM-YYYY hh:mm:ss"} disabled={!editable && !isOpen}/>
           </Form.Item>
           { (!isOpen) && <Form.Item name="record_date" label="Record Date">
             <DatePicker showTime format={"DD-MM-YYYY hh:mm:ss"} disabled={true}/>
