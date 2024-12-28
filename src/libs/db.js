@@ -1,3 +1,3 @@
-const {username, password} = process.env;
+const {mongo_uri} = process.env;
 
-export const mongoDBURI = "mongodb://localhost:27017/todo-app"
+export const mongoDBURI = `${mongo_uri}/todo-app`

@@ -5,11 +5,11 @@
 
 /* table background css */
 .ant-table-thead > tr > th {
-    background-color: #585a5a !important;
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1)) !important;
     color: #fff !important;
 }
 .ant-table-tbody > tr > td {
-  background-color: #909494;
+  background-color: #d2d6d6;
   color: #333;
 }
 
@@ -24,7 +24,7 @@
 
 /* pagination css */
 .ant-pagination-item {
-  background-color: #909494 !important;
+  background-color: black !important;
   color: #0000 !important;
   border: 2px solid #0000 !important;
 }
@@ -34,7 +34,7 @@
 }
 
 .ant-pagination-item:hover {
-  background-color: #333 !important;
+  background-color: black !important;
   color: #ffff !important;
 }
 
@@ -42,4 +42,32 @@
 /* menu hover css */
 .ant-btn-variant-text:not(:disabled):not(.ant-btn-disabled):hover {
   color: #fff !important;
+}
+
+/* delete model */
+.deletebtn {
+  background-color: red;
+  padding: 12px;
+}
+.cancelbtn {
+  padding: 12px;
+}
+
+/* date picker */
+.ant-picker-dropdown .ant-picker-panel-container .ant-picker-panels {
+ flex-direction: column;
+}
+
+/* antd button default hover css */
+.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, .ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+/* disable input for the view record */
+.ant-input.ant-input-disabled, .ant-input-outlined, .ant-picker-outlined.ant-picker-disabled, .ant-picker-outlined {
+  color: #050505;
+  border-color: #9999;
+  border-width: 2px;
 }

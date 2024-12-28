@@ -10,7 +10,7 @@ const BasicLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <Layout>
       <Header />
-      <Layout className="flex flex-row">
+      <Layout className="flex flex-row h-[100vh]">
         <Sidebar />
         <Content className="p-5 overflow-x-auto">
           {children}
