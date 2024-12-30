@@ -1,3 +1,3 @@
-const {mongo_uri} = process.env;
+const {MONGODB_URI} = process.env;
 
-export const mongoDBURI = `${mongo_uri}/todo-app`
+export const mongoDBURI = `${MONGODB_URI}/todo-app`

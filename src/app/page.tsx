@@ -23,18 +23,32 @@ const Home = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
 
   const fetchRecords = async () => {
-    try {
+    // try {
+    //   setLoading(true);
+    //   const res = await axios.get(
+    //     `${process.env.NEXT_PUBLIC_BASE_URL}/records`
+    //   );
+    //   const { data, status } = res;
+    //   if (status == 200) setRecords(data?.records);
+    // } catch (error) {
+    //   console.log("Error while fetching records", error);
+    // } finally {
+    //   setLoading(false);
+    // }
+    // try {
       setLoading(true);
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/records`
-      );
-      const { data, status } = res;
-      if (status == 200) setRecords(data?.records);
-    } catch (error) {
-      console.log("Error while fetching records", error);
-    } finally {
+      // const res = await axios.get(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/records`
+      // );
+      const res = await axios.get('http://todo-nextgen.vercel.app/api/records')
+      console.log('res',res)
+      // const { data, status } = res;
+      // if (status == 200) setRecords(data?.records);
+    // } catch (error) {
+      console.log("Error while fetching records");
       setLoading(false);
-    }
+    // } finally {
+    // }
   };
   useEffect(() => {
     fetchRecords();

@@ -22,18 +22,21 @@ const Page = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
 
   const fetchRecords = async () => {
-    try {
+    console.log("mognourl",process.env.NEXT_PUBLIC_BASE_URL)
+    // try {
       setLoading(true);
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/records`
-      );
+      // const res = await axios.get(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/records`
+      // );
+      const res = await axios.get('https://todo-nextgen.vercel.app/api/records')
+      console.log('res',res)
       const { data, status } = res;
       if (status == 200) setRecords(data?.records);
-    } catch (error) {
-      console.log("Error while fetching records", error);
-    } finally {
+    // } catch (error) {
+      console.log("Error while fetching records");
       setLoading(false);
-    }
+    // } finally {
+    // }
   };
   useEffect(() => {
     fetchRecords();
