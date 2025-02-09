@@ -48,9 +48,15 @@ const RecordModal: React.FC<RecordModalProps> = ({
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/add-record`,
-        submitObject
+        submitObject,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       );
-      if (res.status == 201) {
+      console.log("res 200",res)
+      if (res.status == 200) {
         onClose();
       }
     } catch (error) {
@@ -68,7 +74,7 @@ const RecordModal: React.FC<RecordModalProps> = ({
     const payloadToUpdate = form.getFieldsValue();
     try {
       const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/update-record/${_id}`,{payloadToUpdate}
+        `${process.env.NEXT_PUBLIC_BASE_URL}update-record/${_id}`,{payloadToUpdate}
       );
       if (res.status == 200) {
         onClose();

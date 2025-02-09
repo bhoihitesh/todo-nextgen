@@ -1,5 +1,4 @@
 "use client";
-"use client";
 import { Popconfirm, Spin, Table, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import {
@@ -23,32 +22,18 @@ const Home = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
 
   const fetchRecords = async () => {
-    // try {
-    //   setLoading(true);
-    //   const res = await axios.get(
-    //     `${process.env.NEXT_PUBLIC_BASE_URL}/records`
-    //   );
-    //   const { data, status } = res;
-    //   if (status == 200) setRecords(data?.records);
-    // } catch (error) {
-    //   console.log("Error while fetching records", error);
-    // } finally {
-    //   setLoading(false);
-    // }
-    // try {
+    try {
       setLoading(true);
-      // const res = await axios.get(
-      //   `${process.env.NEXT_PUBLIC_BASE_URL}/records`
-      // );
-      const res = await axios.get('http://todo-nextgen.vercel.app/api/records')
-      console.log('res',res)
-      // const { data, status } = res;
-      // if (status == 200) setRecords(data?.records);
-    // } catch (error) {
-      console.log("Error while fetching records");
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/records`);
+      const { data, status } = res;
+      console.log(data)
+      if (status == 200 && data) setRecords(data);
+    } catch (error) {
+      console.log("Error while fetching records", error);
+    } finally {
       setLoading(false);
-    // } finally {
-    // }
+    }
   };
   useEffect(() => {
     fetchRecords();
@@ -130,9 +115,12 @@ const Home = () => {
   };
   const handledelete = async (id: string) => {
     try {
+      console.warn("delete called", `${process.env.NEXT_PUBLIC_BASE_URL}/delete-record/${id}`);
+      
       const res = await axios.delete(
         `${process.env.NEXT_PUBLIC_BASE_URL}/delete-record/${id}`
       );
+      console.log(res)
       if (res.status === 200) {
         handleCloseModal();
       }
@@ -151,7 +139,8 @@ const Home = () => {
     setAddModal(false);
     fetchRecords();
   };
-
+  console.warn('editRecord',editRecord);
+  
   return (
     <>
       {loading ? (
