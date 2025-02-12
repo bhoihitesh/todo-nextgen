@@ -71,3 +71,12 @@
   border-color: #9999;
   border-width: 2px;
 }
+
+/* table content scroll */
+.ant-table-wrapper 
+.ant-table-thead >tr>th {
+  text-wrap: nowrap !important;
+}
+.ant-table{
+  overflow: auto !important;
+}

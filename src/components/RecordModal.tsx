@@ -1,6 +1,6 @@
 "use client";
 import { recordType } from "@/customeTypes";
-import { Button, DatePicker, Form, Input, Modal } from "antd";
+import { Button, DatePicker, Form, Input, Modal, TimePicker } from "antd";
 import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import moment from "moment";
@@ -26,15 +26,13 @@ const RecordModal: React.FC<RecordModalProps> = ({
   isOpen,
 }) => {
   const [form] = useForm();
-  const [currentRecord, setCurrentRecord] = useState([record])
+  const [currentRecord, setCurrentRecord] = useState([record]);
 
   const handleSubmit = async () => {
-    const recordDate = moment(new Date()).format(
-      "YYYY-MM-DD hh:mm:ss"
-    );
-    const recordStartDate = moment(form.getFieldValue("record_start_date")).format(
-      "YYYY-MM-DD hh:mm:ss"
-    );
+    const recordDate = moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
+    const recordStartDate = moment(
+      form.getFieldValue("record_start_date")
+    ).format("YYYY-MM-DD hh:mm:ss");
     const taskname = form.getFieldValue("title");
     const taskdescription = form.getFieldValue("description");
 
@@ -44,18 +42,17 @@ const RecordModal: React.FC<RecordModalProps> = ({
       title: taskname,
       description: taskdescription,
     };
-    
+
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/add-record`,
         submitObject,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
-      console.log("res 200",res)
       if (res.status == 200) {
         onClose();
       }
@@ -63,53 +60,63 @@ const RecordModal: React.FC<RecordModalProps> = ({
       console.error("Error while inserting record", error);
     }
   };
-  
-  const handleCloseModal =()=>{
+
+  const handleCloseModal = () => {
     onClose();
     form.resetFields();
-  }
+  };
 
-  const handleUpdateModal = async()=>{
+  const handleUpdateModal = async () => {
     const _id = record?._id;
     const payloadToUpdate = form.getFieldsValue();
     try {
       const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}update-record/${_id}`,{payloadToUpdate}
+        `${process.env.NEXT_PUBLIC_BASE_URL}update-record/${_id}`,
+        { payloadToUpdate }
       );
       if (res.status == 200) {
         onClose();
       }
     } catch (error) {
-      console.log("Error while updating record",error)
+      console.log("Error while updating record", error);
     }
-  }
+  };
 
-  useEffect(()=>{
-    if(!isOpen) {
+  useEffect(() => {
+    console.warn('record', record)
+    if (!isOpen) {
       let fieldValues: Record<string, any> = {};
-      currentRecord.forEach((item:any)=>{
-        Object.entries(item).forEach(([key, value])=>{
-          if(key.includes("date") && value){
+      currentRecord.forEach((item: any) => {
+        Object.entries(item).forEach(([key, value]) => {
+          if (key.includes("date") && value) {
             fieldValues[key] = moment(value);
-          } else if(value) {
+          } else if (value) {
             fieldValues[key] = value;
           }
-        })
+        });
         form.setFieldsValue(fieldValues);
-      })
+      });
     }
-  },[editable, record])
+  }, [editable, record]);
   return (
     <>
       <Modal
-        title={<span className="text-[18px]">{ isOpen ? "Add Record" : editable ? "Edit record" : "View record" }</span>}
+        title={
+          <span className="text-[18px]">
+            {isOpen ? "Add Record" : editable ? "Edit record" : "View record"}
+          </span>
+        }
         centered
         open={true}
         onOk={handleCloseModal}
         footer={
           isOpen
             ? [
-                <Button key="cancel" className="bg-black text-white" onClick={handleCloseModal}>
+                <Button
+                  key="cancel"
+                  className="bg-black text-white"
+                  onClick={handleCloseModal}
+                >
                   Cancel
                 </Button>,
                 <Button
@@ -122,7 +129,11 @@ const RecordModal: React.FC<RecordModalProps> = ({
               ]
             : editable
             ? [
-                <Button key="cancel" className="bg-black text-white" onClick={handleCloseModal}>
+                <Button
+                  key="cancel"
+                  className="bg-black text-white"
+                  onClick={handleCloseModal}
+                >
                   Cancel
                 </Button>,
                 <Button
@@ -143,19 +154,34 @@ const RecordModal: React.FC<RecordModalProps> = ({
           onFinish={() => handleSubmit()}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
+          layout="vertical"
         >
           <Form.Item<fieldType> name="title" label="Task">
-            <Input disabled={!editable && !isOpen}/>
+            <Input disabled={!editable && !isOpen} />
           </Form.Item>
           <Form.Item name="description" label="Description">
-            <Input  disabled={!editable && !isOpen}/>
+            <Input disabled={!editable && !isOpen} />
           </Form.Item>
+          <div className="flex gap-2">
           <Form.Item name="record_start_date" label="Record Start Date">
-            <DatePicker showTime format={"DD-MM-YYYY hh:mm:ss"} disabled={!editable && !isOpen}/>
+            <DatePicker format={"DD-MM-YYYY"} disabled={!editable && !isOpen} />
           </Form.Item>
-          { (!isOpen) && <Form.Item name="record_date" label="Record Date">
-            <DatePicker showTime format={"DD-MM-YYYY hh:mm:ss"} disabled={true}/>
-          </Form.Item>}
+          <Form.Item name="record_start_time" label="Record Start Time">
+            <TimePicker type={"time"} disabled={!editable && !isOpen} />
+          </Form.Item>
+          </div>
+          {!isOpen && (
+            <>
+            <div className="flex gap-2">
+              <Form.Item name="record_date" label="Record Date">
+                <DatePicker format={"DD-MM-YYYY"} disabled={true} />
+              </Form.Item>
+              <Form.Item name="record_time" label="Record Time">
+                <TimePicker type={"time"} disabled={true} />
+              </Form.Item>
+              </div>
+            </>
+          )}
         </Form>
       </Modal>
     </>

@@ -27,7 +27,6 @@ const Home = () => {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/records`);
       const { data, status } = res;
-      console.log(data)
       if (status == 200 && data) setRecords(data);
     } catch (error) {
       console.log("Error while fetching records", error);
@@ -43,10 +42,12 @@ const Home = () => {
     {
       title: "Title",
       dataIndex: "title",
+      width: "150px",
     },
     {
       title: "Description",
       dataIndex: "description",
+      width: "180px",
     },
     {
       title: "Record start date",
@@ -54,6 +55,7 @@ const Home = () => {
       render: (_, record) => {
         return moment(record.record_start_date).format("DD-MM-YYYY hh:mm:ss");
       },
+      width: "160px",
     },
     {
       title: "Record date",
@@ -61,6 +63,7 @@ const Home = () => {
       render: (_, record) => {
         return moment(record.record_date).format("DD-MM-YYYY hh:mm:ss");
       },
+      width: "160px",
     },
     {
       title: "View",
@@ -70,6 +73,7 @@ const Home = () => {
           onClick={() => handleView(record)}
         />
       ),
+      width: "50px",
     },
     {
       title: "Edit",
@@ -81,6 +85,7 @@ const Home = () => {
           />
         </>
       ),
+      width: "50px",
     },
 
     {
@@ -98,29 +103,25 @@ const Home = () => {
           <DeleteOutlined className="text-[20px] hover:text-red-700" />
         </Popconfirm>
       ),
+      width: "50px",
     },
   ];
 
   const handleView = (record: recordType) => {
-    console.log(record);
     setEditRecord(record);
     setIsEdit(false);
     setIsModalOpen(true);
   };
   const handleEdit = (record: recordType) => {
-    console.log(record);
     setEditRecord(record);
     setIsEdit(true);
     setIsModalOpen(true);
   };
   const handledelete = async (id: string) => {
     try {
-      console.warn("delete called", `${process.env.NEXT_PUBLIC_BASE_URL}/delete-record/${id}`);
-      
       const res = await axios.delete(
         `${process.env.NEXT_PUBLIC_BASE_URL}/delete-record/${id}`
       );
-      console.log(res)
       if (res.status === 200) {
         handleCloseModal();
       }
@@ -139,7 +140,6 @@ const Home = () => {
     setAddModal(false);
     fetchRecords();
   };
-  console.warn('editRecord',editRecord);
   
   return (
     <>
