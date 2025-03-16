@@ -12,6 +12,8 @@ import axios from "axios";
 import RecordModal from "@/components/RecordModal";
 import FilterTab from "@/components/FilterTab";
 import moment from "moment";
+import { getToken } from "firebase/messaging";
+import { messaging } from "@/firebase/firebase";
 
 const Home = () => {
   const [records, setRecords] = useState([]);
@@ -34,8 +36,25 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  const requestNotification = async() => {
+    const permission = await Notification.requestPermission();
+    console.warn(permission);
+    
+    if (permission === "granted") {
+      // token
+      const token = await getToken(messaging, {
+        vapidKey: 'BA_YJAYaL-aFDZTWEs4NiYVCuZn_i2TCpai6646ZkgQI3sfoEgWsIAm-JFGIp5bN2HrPqHh0_3l-kQpaHgHEYo0'
+      });
+      console.warn('permission granted', token);
+    }
+    else if ( permission === "denied") {
+      console.log("Permission denied");
+    }
+  }
   useEffect(() => {
     fetchRecords();
+    requestNotification();
   }, []);
 
   const columns: TableProps<recordType>["columns"] = [
@@ -50,19 +69,9 @@ const Home = () => {
       width: "180px",
     },
     {
-      title: "Record start date",
+      title: "Time",
       dataIndex: "record_start_date",
-      render: (_, record) => {
-        return moment(record.record_start_date).format("DD-MM-YYYY hh:mm:ss");
-      },
-      width: "160px",
-    },
-    {
-      title: "Record date",
-      dataIndex: "record_date",
-      render: (_, record) => {
-        return moment(record.record_date).format("DD-MM-YYYY hh:mm:ss");
-      },
+      render: (_, record) => record?.record_start_date +' '+ record?.record_start_time,
       width: "160px",
     },
     {

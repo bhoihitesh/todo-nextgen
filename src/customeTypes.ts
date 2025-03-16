@@ -4,4 +4,5 @@ export interface recordType {
   description: string;
   record_date: string;
   record_start_date: string;
+  record_start_time: string;
 };

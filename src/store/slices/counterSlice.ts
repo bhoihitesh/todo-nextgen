@@ -4,7 +4,8 @@ const counterSlice = createSlice({
     name: 'myslice',
     initialState: {
         count: 0,
-        isSidebarOpen: true,
+        // isSidebarOpen: true,
+        isSidebarOpen: false,
     },
     reducers: {
         increment:(state) => {
@@ -19,7 +20,8 @@ const counterSlice = createSlice({
             state.count = 1;
         },
         handleSidebarToggle:(state)=>{
-            state.isSidebarOpen = !state.isSidebarOpen;
+            // state.isSidebarOpen = !state.isSidebarOpen;
+            state.isSidebarOpen = false;
         }
     }
 })

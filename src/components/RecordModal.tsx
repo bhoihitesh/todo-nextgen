@@ -1,7 +1,7 @@
 "use client";
 import { recordType } from "@/customeTypes";
 import { Button, DatePicker, Form, Input, Modal, TimePicker } from "antd";
-import { useForm } from "antd/es/form/Form";
+import { useForm, useWatch } from "antd/es/form/Form";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -29,18 +29,22 @@ const RecordModal: React.FC<RecordModalProps> = ({
   const [currentRecord, setCurrentRecord] = useState([record]);
 
   const handleSubmit = async () => {
-    const recordDate = moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
-    const recordStartDate = moment(
-      form.getFieldValue("record_start_date")
-    ).format("YYYY-MM-DD hh:mm:ss");
+    const startDate = moment(form.getFieldValue("record_start_date")?.$d).format('DD-MM-YYYY');
+    const startTime = moment(form.getFieldValue("record_start_time")?.$d).format('hh:mm A');
     const taskname = form.getFieldValue("title");
     const taskdescription = form.getFieldValue("description");
-
+    
     const submitObject = {
-      record_date: recordDate,
-      record_start_date: recordStartDate,
       title: taskname,
       description: taskdescription,
+      record_start_date: startDate,
+      record_start_time: startTime,
+      created_by: {
+        date: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss"),
+        user: "hitesh",
+        email: "bhoihitesh183@gmail.com",
+        fcm_token: "cpSuQdzwfeP8F6ikltluSf:APA91bGyTi77M4HBMIyWAL_iKr_62bE8nmVwkqf0mIzBVH4-g-6PKpBrwPD9cwx21CS3amg6t6a3YZQ0E3EPcd1cYFJbpbkEqNe_1kjNfp"
+      }
     };
 
     try {
@@ -83,7 +87,6 @@ const RecordModal: React.FC<RecordModalProps> = ({
   };
 
   useEffect(() => {
-    console.warn('record', record)
     if (!isOpen) {
       let fieldValues: Record<string, any> = {};
       currentRecord.forEach((item: any) => {
@@ -167,19 +170,19 @@ const RecordModal: React.FC<RecordModalProps> = ({
             <DatePicker format={"DD-MM-YYYY"} disabled={!editable && !isOpen} />
           </Form.Item>
           <Form.Item name="record_start_time" label="Record Start Time">
-            <TimePicker type={"time"} disabled={!editable && !isOpen} />
+            <TimePicker type={"time"} use12Hours format={"hh:mm A"} disabled={!editable && !isOpen} />
           </Form.Item>
           </div>
           {!isOpen && (
             <>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <Form.Item name="record_date" label="Record Date">
                 <DatePicker format={"DD-MM-YYYY"} disabled={true} />
               </Form.Item>
               <Form.Item name="record_time" label="Record Time">
                 <TimePicker type={"time"} disabled={true} />
               </Form.Item>
-              </div>
+              </div> */}
             </>
           )}
         </Form>
