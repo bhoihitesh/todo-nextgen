@@ -1,31 +1,8 @@
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-// // Your web app's Firebase configuration
-// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-  //   apiKey: "AIzaSyBiwG-d35STYTrXpFPGMp2zTViX-DLa1ac",
-  //   authDomain: "myapp-c5e6a.firebaseapp.com",
-  //   projectId: "myapp-c5e6a",
-  //   storageBucket: "myapp-c5e6a.firebasestorage.app",
-  //   messagingSenderId: "854097604851",
-  //   appId: "1:854097604851:web:dc1fd2742ce69480e00786",
-  //   measurementId: "G-HLJVCVPLVE"
-  // };
-  
-  // // Initialize Firebase
-  // export const app = initializeApp(firebaseConfig);
-  // const analytics = getAnalytics(app);
-  
-  'use client'
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "firebase/app";
-  import { getAnalytics } from "firebase/analytics";
-  import { getMessaging } from "firebase/messaging";
+'use client'
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getMessaging, isSupported } from "firebase/messaging";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -41,7 +18,25 @@ const firebaseConfig = {
   measurementId: "G-C6NR543EYW"
 };
 
+// // Initialize Firebase
+// export const app = initializeApp(firebaseConfig);
+// export const messaging = getMessaging(app);
+// const analytics = getAnalytics(app);
+
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const messaging = getMessaging(app);
-const analytics = getAnalytics(app);
+
+// Initialize analytics only in the browser
+export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+
+// Initialize messaging only if the browser supports it
+export let messaging: ReturnType<typeof getMessaging> | null = null;
+
+const initMessaging = async () => {
+  if (typeof window !== "undefined" && (await isSupported())) {
+    messaging = getMessaging(app);
+  }
+};
+
+// Call the function to initialize messaging
+initMessaging();

@@ -38,15 +38,29 @@ const Home = () => {
   };
 
   const requestNotification = async() => {
+
+    if (!messaging) {
+      console.log("Firebase Messaging is not available.");
+      return;
+    }
+
     const permission = await Notification.requestPermission();
     console.warn(permission);
     
     if (permission === "granted") {
       // token
-      const token = await getToken(messaging, {
-        vapidKey: 'BA_YJAYaL-aFDZTWEs4NiYVCuZn_i2TCpai6646ZkgQI3sfoEgWsIAm-JFGIp5bN2HrPqHh0_3l-kQpaHgHEYo0'
-      });
-      console.warn('permission granted', token);
+      // const token = await getToken(messaging, {
+      //   vapidKey: 'BA_YJAYaL-aFDZTWEs4NiYVCuZn_i2TCpai6646ZkgQI3sfoEgWsIAm-JFGIp5bN2HrPqHh0_3l-kQpaHgHEYo0'
+      // });
+      // console.warn('permission granted', token);
+      try {
+        const token = await getToken(messaging, {
+          vapidKey: "BA_YJAYaL-aFDZTWEs4NiYVCuZn_i2TCpai6646ZkgQI3sfoEgWsIAm-JFGIp5bN2HrPqHh0_3l-kQpaHgHEYo0"
+        });
+        console.warn("FCM Token:", token);
+      } catch (error) {
+        console.error("Error fetching FCM token:", error);
+      }
     }
     else if ( permission === "denied") {
       console.log("Permission denied");
