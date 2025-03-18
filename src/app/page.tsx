@@ -48,14 +48,9 @@ const Home = () => {
     console.warn(permission);
     
     if (permission === "granted") {
-      // token
-      // const token = await getToken(messaging, {
-      //   vapidKey: 'BA_YJAYaL-aFDZTWEs4NiYVCuZn_i2TCpai6646ZkgQI3sfoEgWsIAm-JFGIp5bN2HrPqHh0_3l-kQpaHgHEYo0'
-      // });
-      // console.warn('permission granted', token);
       try {
         const token = await getToken(messaging, {
-          vapidKey: "BA_YJAYaL-aFDZTWEs4NiYVCuZn_i2TCpai6646ZkgQI3sfoEgWsIAm-JFGIp5bN2HrPqHh0_3l-kQpaHgHEYo0"
+          vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY
         });
         console.warn("FCM Token:", token);
       } catch (error) {

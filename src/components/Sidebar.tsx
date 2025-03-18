@@ -18,11 +18,17 @@ const Sidebar = () => {
     >
       {isSidebarOpen && (
         <ul className="text-center w-full px-1">
-          <li
-            className="cursor-pointer py-2 bg-gray-600 rounded-md"
-            onClick={() => router.push("/dashboard")}
-          >
-            Dashboard
+          <li className="cursor-pointer py-2 bg-gray-600 rounded-md">
+            Option1
+          </li>
+          <li className="cursor-pointer py-2 bg-gray-600 rounded-md">
+            Option2
+          </li>
+          <li className="cursor-pointer py-2 bg-gray-600 rounded-md">
+            Option3
+          </li>
+          <li className="cursor-pointer py-2 bg-gray-600 rounded-md">
+            Option4
           </li>
         </ul>
       )}
