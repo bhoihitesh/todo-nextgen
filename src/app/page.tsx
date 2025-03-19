@@ -11,7 +11,6 @@ import { recordType } from "../customeTypes";
 import axios from "axios";
 import RecordModal from "@/components/RecordModal";
 import FilterTab from "@/components/FilterTab";
-import moment from "moment";
 import { getToken } from "firebase/messaging";
 import { messaging } from "@/firebase/firebase";
 

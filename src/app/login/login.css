@@ -1,0 +1,13 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+.main-container {
+    width: 50%;
+}
+.login-title {
+    font-size: 24px;
+}

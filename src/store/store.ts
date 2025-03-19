@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./slices/counterSlice"
+import alertSlice from "./slices/alertSlice";
 export const store = configureStore({
     reducer: {
-        myslice: counterSlice
+        myslice: counterSlice,
+        alert: alertSlice,
     }
 })
 

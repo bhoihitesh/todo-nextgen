@@ -80,3 +80,18 @@
 .ant-table{
   overflow: auto !important;
 }
+
+/* Bootstrap notificaiton */
+.alert-container {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 1050; /* Higher than most elements */
+  min-width: 250px;
+}
+.alert {
+  padding: 10px !important;  /* Reduce overall padding */
+}
+.alert .btn-close {
+  margin-top: -8px;  /* Fine-tune vertical alignment */
+}
