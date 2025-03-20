@@ -6,9 +6,9 @@ export const getUsers = async() => {
 }
 
 export const login = async(user: userType) => {
-    return await axios.post(`http://localhost:5000/v1/api/login`,user, {withCredentials: true});
+    return await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`,user, {withCredentials: true});
 }
 
 export const logout = async()=>{
-    return await axios.delete('http://localhost:5000/v1/api/logout',{withCredentials: true})
+    return await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/logout`,{withCredentials: true})
 }
