@@ -12,10 +12,26 @@ import {
 import { handleSidebarToggle } from "@/store/slices/counterSlice";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+import { logout } from "@/customeAPIs/page";
+import { useRouter } from "next/navigation";
+import { showAlert } from "@/store/slices/alertSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const router = useRouter()
 
+  const handleLogout=async()=>{
+    const res = await logout();
+    dispatch(
+      showAlert({
+        message: res.data.message,
+        type: "success" 
+      })
+    )
+    setTimeout(()=>{
+      router.push("/login");
+    },2000)
+  }
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -38,9 +54,9 @@ const Header = () => {
     {
       key: "3",
       label: (
-        <Link href="/login">
+        <Link href="" onClick={handleLogout}>
           <LoginOutlined className="mr-2" />
-          Login
+          Logout
         </Link>
       ),
     },
