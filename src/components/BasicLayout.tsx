@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactNode } from "react";
 import { Layout } from "antd";
 import Sidebar from "./Sidebar";

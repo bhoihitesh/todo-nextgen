@@ -1,3 +1,4 @@
+"use client";
 export interface recordType {
   _id: string;
   title: string;

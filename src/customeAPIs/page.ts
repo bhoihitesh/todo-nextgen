@@ -1,3 +1,4 @@
+"use client";
 import { userType } from "@/customeTypes";
 import axios from "axios"
 

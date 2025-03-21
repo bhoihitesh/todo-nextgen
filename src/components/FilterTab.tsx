@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import { Button, DatePicker } from 'antd';
 import { PlusOutlined, ReloadOutlined } from "@ant-design/icons"

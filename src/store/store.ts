@@ -1,3 +1,4 @@
+"use client";
 import { configureStore } from "@reduxjs/toolkit";
 import counterSlice from "./slices/counterSlice"
 import alertSlice from "./slices/alertSlice";
