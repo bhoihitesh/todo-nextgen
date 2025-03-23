@@ -12,7 +12,7 @@ const Alert = () => {
     if (message) {
       setTimeout(() => {
         dispatch(hideAlert());
-      }, 8000);
+      }, 3000);
     }
   }, [message, dispatch]);
 

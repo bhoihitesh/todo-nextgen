@@ -31,6 +31,7 @@ const Header = () => {
     setTimeout(()=>{
       router.push("/login");
     },2000)
+    localStorage.clear();
   }
   const items: MenuProps["items"] = [
     {

@@ -19,10 +19,10 @@ const Login = () => {
           type: "success",
         })
       );
-      await Notification.requestPermission();
       setTimeout(() => {
         router.push("/");
       }, 3000);
+      localStorage.setItem('auth',JSON.stringify(form.getFieldValue('username')));
     } catch (error: any) {
       dispatch(
         showAlert({

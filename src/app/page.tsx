@@ -13,6 +13,7 @@ import RecordModal from "@/components/RecordModal";
 import FilterTab from "@/components/FilterTab";
 import { getToken } from "firebase/messaging";
 import { messaging } from "@/firebase/firebase";
+import { updateUser } from "@/customeAPIs/page";
 
 const Home = () => {
   const [records, setRecords] = useState([]);
@@ -26,7 +27,8 @@ const Home = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/records`);
+        `${process.env.NEXT_PUBLIC_BASE_URL}/records`
+      );
       const { data, status } = res;
       if (status == 200 && data) setRecords(data);
     } catch (error) {
@@ -36,8 +38,7 @@ const Home = () => {
     }
   };
 
-  const requestNotification = async() => {
-
+  const requestNotification = async () => {
     if (!messaging) {
       console.log("Firebase Messaging is not available.");
       return;
@@ -45,21 +46,27 @@ const Home = () => {
 
     const permission = await Notification.requestPermission();
     console.warn(permission);
-    
+
     if (permission === "granted") {
       try {
         const token = await getToken(messaging, {
-          vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY
+          vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
         });
-        console.warn("FCM Token:", token);
+        if (token) {
+          const getUsername = localStorage.getItem("auth");
+          const payload = {
+            fcm_token: token,
+            username: JSON.parse(getUsername || "user"),
+          };
+          await updateUser(payload);
+          }
       } catch (error) {
         console.error("Error fetching FCM token:", error);
       }
-    }
-    else if ( permission === "denied") {
+    } else if (permission === "denied") {
       console.log("Permission denied");
     }
-  }
+  };
   useEffect(() => {
     fetchRecords();
     requestNotification();
@@ -79,7 +86,8 @@ const Home = () => {
     {
       title: "Time",
       dataIndex: "record_start_date",
-      render: (_, record) => record?.record_start_date +' '+ record?.record_start_time,
+      render: (_, record) =>
+        record?.record_start_date + " " + record?.record_start_time,
       width: "160px",
     },
     {
@@ -157,20 +165,21 @@ const Home = () => {
     setAddModal(false);
     fetchRecords();
   };
-  
+
   return (
     <>
       {loading ? (
         <div className="flex justify-center items-center h-[80vh] overflow-hidden">
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 34, color: 'black' }} spin />} />
+          <Spin
+            indicator={
+              <LoadingOutlined style={{ fontSize: 34, color: "black" }} spin />
+            }
+          />
         </div>
       ) : (
         <>
           <div className="float-end" style={{ paddingBottom: "10px" }}>
-            <FilterTab
-              onOpen={handleOpenAddModal}
-              reload={fetchRecords}
-            />
+            <FilterTab onOpen={handleOpenAddModal} reload={fetchRecords} />
           </div>
           <div>
             <Table<recordType>
