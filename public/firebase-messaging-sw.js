@@ -1,5 +1,9 @@
-importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js');
+importScripts(
+  "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"
+);
+importScripts(
+  "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"
+);
 
 firebase.initializeApp({
   apiKey: "AIzaSyCmq0z5L3IxtIc1inplFJT424A-G8T-W3c",
@@ -14,8 +18,19 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    self.registration.showNotification(payload.notification.title, {
+  self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
-    icon: '/firebase-logo.png' // Update with your icon
+    icon: "/firebase-logo.png",
+    badge: "/firebase-logo.png",
+    vibrate: [200, 100, 200],
+    requireInteraction: true,
+    tag: "high-priority-tag",
+    renotify: true,
+  }),
+  self.addEventListener("notificationclick", function(e) {
+    event.notification.close();
+    event.waitUntil(
+      clients.openWindow(event.notification.data?.click_action || "/")
+    )
   });
 });
