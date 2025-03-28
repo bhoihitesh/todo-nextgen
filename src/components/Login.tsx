@@ -43,7 +43,7 @@ const Login = () => {
         className="form-container"
       >
         <h1 className="login-title">Login</h1>
-        <Form.Item className="main-container">
+        <Form.Item className="main-container w-100 px-3">
           <Form.Item
             label="Username"
             name="username"

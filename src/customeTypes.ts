@@ -6,6 +6,11 @@ export interface recordType {
   record_date: string;
   record_start_date: string;
   record_start_time: string;
+  created_by: {
+    date: string,
+    user: string,
+    email: string,
+  }
 };
 
 export interface userType {

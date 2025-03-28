@@ -2,8 +2,7 @@
 import { addRecord, updateRecord } from "@/customeAPIs/page";
 import { recordType } from "@/customeTypes";
 import { Button, DatePicker, Form, Input, Modal, TimePicker } from "antd";
-import { useForm, useWatch } from "antd/es/form/Form";
-import axios from "axios";
+import { useForm } from "antd/es/form/Form";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 
