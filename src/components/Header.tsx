@@ -15,6 +15,7 @@ import Link from "next/link";
 import { logout } from "@/customeAPIs/page";
 import { useRouter } from "next/navigation";
 import { showAlert } from "@/store/slices/alertSlice";
+import { clearLocalStorage, getAuth } from "@/localStorage/GetLocalData";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const Header = () => {
     setTimeout(()=>{
       router.push("/login");
     },2000)
-    localStorage.clear();
+    clearLocalStorage();
   }
   const items: MenuProps["items"] = [
     {
@@ -62,7 +63,7 @@ const Header = () => {
       ),
     },
   ];
-
+  
   return (
     <div className="header-container flex justify-between items-center bg-slate-900 w-full gap-[10px]">
       <div className="flex items-center justify-between md:w-[330px] sm:w-[350px]">
@@ -91,7 +92,8 @@ const Header = () => {
         <div className="w-[50px]">
           <Dropdown menu={{ items }} placement="bottom">
             <Avatar style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}>
-              USER
+            {/* display the username's first letter */}
+            {getAuth()?.charAt(1).toUpperCase()}
             </Avatar>
           </Dropdown>
         </div>

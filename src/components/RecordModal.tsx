@@ -1,4 +1,5 @@
 "use client";
+import { addRecord, updateRecord } from "@/customeAPIs/page";
 import { recordType } from "@/customeTypes";
 import { Button, DatePicker, Form, Input, Modal, TimePicker } from "antd";
 import { useForm, useWatch } from "antd/es/form/Form";
@@ -29,12 +30,16 @@ const RecordModal: React.FC<RecordModalProps> = ({
   const [currentRecord, setCurrentRecord] = useState([record]);
 
   const handleSubmit = async () => {
-    const startDate = moment(form.getFieldValue("record_start_date")?.$d).format('DD-MM-YYYY');
-    const startTime = moment(form.getFieldValue("record_start_time")?.$d).format('hh:mm A');
+    const startDate = moment(
+      form.getFieldValue("record_start_date")?.$d
+    ).format("DD-MM-YYYY");
+    const startTime = moment(
+      form.getFieldValue("record_start_time")?.$d
+    ).format("hh:mm A");
     const taskname = form.getFieldValue("title");
     const taskdescription = form.getFieldValue("description");
-    
-    const submitObject = {
+
+    const payload = {
       title: taskname,
       description: taskdescription,
       record_start_date: startDate,
@@ -43,22 +48,12 @@ const RecordModal: React.FC<RecordModalProps> = ({
         date: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss"),
         user: "hitesh",
         email: "bhoihitesh183@gmail.com",
-      }
+      },
     };
 
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/add-record`,
-        submitObject,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (res.status == 200) {
-        onClose();
-      }
+      const res = await addRecord(payload);
+      onClose();
     } catch (error) {
       console.error("Error while inserting record", error);
     }
@@ -70,16 +65,9 @@ const RecordModal: React.FC<RecordModalProps> = ({
   };
 
   const handleUpdateModal = async () => {
-    const _id = record?._id;
-    const payloadToUpdate = form.getFieldsValue();
     try {
-      const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}update-record/${_id}`,
-        { payloadToUpdate }
-      );
-      if (res.status == 200) {
-        onClose();
-      }
+      const res = await updateRecord(record?._id!, form.getFieldsValue());
+      onClose();
     } catch (error) {
       console.log("Error while updating record", error);
     }
@@ -165,25 +153,21 @@ const RecordModal: React.FC<RecordModalProps> = ({
             <Input disabled={!editable && !isOpen} />
           </Form.Item>
           <div className="flex gap-2">
-          <Form.Item name="record_start_date" label="Record Start Date">
-            <DatePicker format={"DD-MM-YYYY"} disabled={!editable && !isOpen} />
-          </Form.Item>
-          <Form.Item name="record_start_time" label="Record Start Time">
-            <TimePicker type={"time"} use12Hours format={"hh:mm A"} disabled={!editable && !isOpen} />
-          </Form.Item>
+            <Form.Item name="record_start_date" label="Record Start Date">
+              <DatePicker
+                format={"DD-MM-YYYY"}
+                disabled={!editable && !isOpen}
+              />
+            </Form.Item>
+            <Form.Item name="record_start_time" label="Record Start Time">
+              <TimePicker
+                type={"time"}
+                use12Hours
+                format={"hh:mm A"}
+                disabled={!editable && !isOpen}
+              />
+            </Form.Item>
           </div>
-          {!isOpen && (
-            <>
-            {/* <div className="flex gap-2">
-              <Form.Item name="record_date" label="Record Date">
-                <DatePicker format={"DD-MM-YYYY"} disabled={true} />
-              </Form.Item>
-              <Form.Item name="record_time" label="Record Time">
-                <TimePicker type={"time"} disabled={true} />
-              </Form.Item>
-              </div> */}
-            </>
-          )}
         </Form>
       </Modal>
     </>

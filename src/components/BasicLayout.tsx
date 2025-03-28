@@ -13,7 +13,7 @@ const BasicLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
       <Header />
       <Layout className="flex flex-row h-[100vh]">
         <Sidebar />
-        <Content className="p-5 overflow-x-auto">
+        <Content className="p-lg-5 p-2 overflow-x-auto">
           {children}
         </Content>
       </Layout>

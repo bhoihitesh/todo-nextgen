@@ -13,7 +13,8 @@ import RecordModal from "@/components/RecordModal";
 import FilterTab from "@/components/FilterTab";
 import { getToken } from "firebase/messaging";
 import { messaging } from "@/firebase/firebase";
-import { updateUser } from "@/customeAPIs/page";
+import { deleteRecord, getRecords, updateUser } from "@/customeAPIs/page";
+import { getAuth } from "@/localStorage/GetLocalData";
 
 const Home = () => {
   const [records, setRecords] = useState([]);
@@ -26,11 +27,9 @@ const Home = () => {
   const fetchRecords = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/records`
-      );
+      const res = await getRecords();
       const { data, status } = res;
-      if (status == 200 && data) setRecords(data);
+      setRecords(data);
     } catch (error) {
       console.log("Error while fetching records", error);
     } finally {
@@ -53,7 +52,7 @@ const Home = () => {
           vapidKey: process.env.NEXT_PUBLIC_VAPID_KEY,
         });
         if (token) {
-          const getUsername = localStorage.getItem("auth");
+          const getUsername:string = getAuth()!;
           const payload = {
             fcm_token: token,
             username: JSON.parse(getUsername || "user"),
@@ -144,12 +143,8 @@ const Home = () => {
   };
   const handledelete = async (id: string) => {
     try {
-      const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/delete-record/${id}`
-      );
-      if (res.status === 200) {
-        handleCloseModal();
-      }
+      const res = await deleteRecord(id)
+      handleCloseModal();
     } catch (error) {
       console.error("Error while deleting record", error);
     }

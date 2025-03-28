@@ -1,5 +1,6 @@
 "use client";
 import { login } from "@/customeAPIs/page";
+import { setAuth } from "@/localStorage/GetLocalData";
 import { showAlert } from "@/store/slices/alertSlice";
 import { Button, Form, Input } from "antd";
 import { useRouter } from "next/navigation";
@@ -22,7 +23,7 @@ const Login = () => {
       setTimeout(() => {
         router.push("/");
       }, 3000);
-      localStorage.setItem('auth',JSON.stringify(form.getFieldValue('username')));
+      setAuth(form.getFieldValue('username'));
     } catch (error: any) {
       dispatch(
         showAlert({
