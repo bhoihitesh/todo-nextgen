@@ -43,7 +43,6 @@ const RecordModal: React.FC<RecordModalProps> = ({
         date: moment(Date.now()).format("YYYY-MM-DD hh:mm:ss"),
         user: "hitesh",
         email: "bhoihitesh183@gmail.com",
-        fcm_token: "cpSuQdzwfeP8F6ikltluSf:APA91bGyTi77M4HBMIyWAL_iKr_62bE8nmVwkqf0mIzBVH4-g-6PKpBrwPD9cwx21CS3amg6t6a3YZQ0E3EPcd1cYFJbpbkEqNe_1kjNfp"
       }
     };
 
